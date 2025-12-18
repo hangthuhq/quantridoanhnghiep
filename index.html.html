@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phòng Huấn Luyện Quản Trị Viên</title>
+
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-soft: #e0ecff;
+      --bg: #f4f6f8;
+      --text-main: #1f2933;
+      --text-sub: #6b7280;
+      --card-bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      /* chừa khoảng trống bên phải cho widget chatbot */
+      padding: 0 380px 24px 0;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #ffffff;
+      padding: 16px 32px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.06);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 20px;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #1f2937;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      padding: 16px 24px 8px;
+    }
+
+    .case-btn {
+      padding: 10px 24px;
+      border-radius: 999px;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      background-color: #e5e7eb;
+      color: #4b5563;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .case-btn:hover {
+      background-color: #d1d5db;
+    }
+
+    .case-btn.active {
+      background-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+    }
+
+    .main-container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 8px 24px 24px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+      padding: 28px 32px;
+      min-height: 280px;
+    }
+
+    #welcomeMsg {
+      text-align: center;
+      color: var(--text-sub);
+      font-size: 16px;
+      padding: 40px 0 24px;
+    }
+
+    #displayArea {
+      display: none;
+    }
+
+    #caseTitle {
+      margin: 0 0 16px;
+      font-size: 22px;
+      color: var(--primary);
+      border-bottom: 2px solid #edf2ff;
+      padding-bottom: 12px;
+    }
+
+    #caseContent {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #374151;
+      text-align: justify;
+      white-space: pre-line; /* giữ xuống dòng trong text */
+    }
+
+    @media (max-width: 1200px) {
+      body {
+        padding-right: 16px; /* trên màn nhỏ, ưu tiên nội dung */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Phòng Huấn Luyện Quản Trị Viên</h1>
+  </header>
+
+  <div class="controls">
+    <button class="case-btn active" onclick="loadCase(1, this)">Tình huống 1</button>
+    <button class="case-btn" onclick="loadCase(2, this)">Tình huống 2</button>
+    <button class="case-btn" onclick="loadCase(3, this)">Tình huống 3</button>
+  </div>
+
+  <div class="main-container">
+    <div id="welcomeMsg" class="card">
+      <h2 style="margin-top:0; font-size:18px; color:#111827;">Chào mừng bạn quay trở lại!</h2>
+      <p style="margin:8px 0 0; color:#6b7280;">
+        Bot đã sẵn sàng trò chuyện. Hãy chọn một tình huống phía trên để bắt đầu phần luyện tập phong cách lãnh đạo.
+      </p>
+    </div>
+
+    <div id="displayArea" class="card">
+      <h2 id="caseTitle">Tiêu đề tình huống</h2>
+      <div id="caseContent">
+        Nội dung sẽ hiện ở đây...
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT VOICEFLOW – GIỮ ĐÚNG PROJECT ID CỦA BẠN -->
+  <script type="text/javascript">
+    (function(d, t) {
+      var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+      v.onload = function() {
+        window.voiceflow.chat.load({
+          verify: { projectID: '693432735f8b0349c0b5a4ad' }, // ID của bạn
+          url: 'https://general-runtime.voiceflow.com',
+          versionID: 'production'
+        });
+      };
+      v.src = "https://cdn.voiceflow.com/widget/bundle.mjs";
+      v.type = "text/javascript";
+      s.parentNode.insertBefore(v, s);
+    })(document, 'script');
+  </script>
+
+  <!-- DỮ LIỆU VÀ LOGIC HIỂN THỊ TÌNH HUỐNG -->
+  <script>
+    const cases = {
+      1: {
+        title: "Tình huống 1: Sự cố tại Alpha Manufacturing",
+        body: `Công ty Alpha Manufacturing, chuyên sản xuất linh kiện nhựa công nghiệp, đang trong giai đoạn cao điểm cuối năm. Các đơn hàng liên tục tăng, dây chuyền phải hoạt động tối đa công suất.
+
+SÁNG nay, công ty vừa nhận một đơn hàng gấp từ khách hàng lớn lâu năm – đơn hàng này phải giao vào sáng ngày mai, nếu không công ty có thể bị phạt hợp đồng và mất uy tín với khách hàng. Tuy nhiên, máy duy nhất có thể sản xuất loại linh kiện trong đơn hàng này – bất ngờ bị hỏng.
+
+Người phụ trách chính máy này, anh Nam, mới vào công ty được 2 tháng, chỉ mới quen với vận hành cơ bản và chưa có kinh nghiệm xử lý tình huống khẩn cấp. Bộ phận Kinh doanh liên tục gây áp lực, yêu cầu “bằng mọi giá phải sản xuất ngay để kịp giao hàng”. Trong khi đó, bộ phận Sản xuất báo rằng không có nhân sự kịp thời và họ cũng đang sản xuất theo kế hoạch rồi.
+
+CÂU HỎI: Trong tình huống trên, phong cách lãnh đạo nào là phù hợp nhất? Vì sao bạn lại cho rằng phong cách đó phù hợp? Nếu bạn là CEO, bạn có hướng giải quyết thế nào?`
+      },
+
+      2: {
+        title: "Tình huống 2: Sự phân tán ý tưởng tại Orion Media",
+        body: `Công ty Orion Media chuyên sản xuất nội dung truyền thông cho doanh nghiệp. Tháng này, công ty nhận dự án lớn từ một thương hiệu quốc tế muốn tung ra chiến dịch quảng cáo tại Việt Nam. Đây là dự án không yêu cầu hoàn thành gấp, nhưng lại đòi hỏi sự sáng tạo cao, cần nhiều góc nhìn khác nhau để lựa chọn concept phù hợp với thị trường Việt Nam.
+
+Đội dự án gồm 8 người giàu kinh nghiệm, thường xuyên làm việc nhóm và có khả năng tự chủ cao: 2 copywriter, 2 designer, 1 strategic planner, 1 chuyên viên data, 1 producer và 1 account. Tuy nhiên, tại cuộc họp đầu tiên, mỗi người đưa ra một hướng tiếp cận khác nhau, làm cho cuộc thảo luận bị phân tán và chưa thống nhất được concept chung.
+
+CÂU HỎI: Trong tình huống trên, phong cách lãnh đạo nào là phù hợp nhất? Vì sao bạn lại cho rằng phong cách đó phù hợp? Nếu bạn là Giám đốc Sáng tạo, bạn có hướng giải quyết thế nào?`
+      },
+
+      3: {
+        title: "Tình huống 3: Dự án nhận diện tại Nova Design",
+        body: `Công ty Nova Design là công ty chuyên thiết kế nhận diện thương hiệu và sản phẩm sáng tạo cho doanh nghiệp. Đội ngũ gồm 7 designer nhiều năm kinh nghiệm, mỗi người có phong cách nghệ thuật riêng và quen làm việc độc lập.
+
+Tháng này, công ty nhận dự án thiết kế bộ nhận diện mới cho một thương hiệu thời trang. Thời gian yêu cầu cho dự án đã được thỏa thuận phù hợp giữa công ty và khách hàng, các mốc deadline trong tiến trình làm việc đã được xác định rõ. Đặc biệt, khách hàng mong muốn có nhiều phương án khác nhau và độc đáo để lựa chọn.
+
+CÂU HỎI: Trong tình huống trên, phong cách lãnh đạo nào là phù hợp nhất? Vì sao bạn lại cho rằng phong cách đó phù hợp? Nếu bạn là Giám đốc Sáng tạo, bạn có hướng giải quyết thế nào?`
+      }
+    };
+
+    function loadCase(id, btn) {
+      // Hiển thị card nội dung, ẩn welcome
+      document.getElementById('welcomeMsg').style.display = 'none';
+      document.getElementById('displayArea').style.display = 'block';
+
+      // Đổ dữ liệu
+      document.getElementById('caseTitle').innerText = cases[id].title;
+      document.getElementById('caseContent').innerText = cases[id].body;
+
+      // Đổi trạng thái nút active
+      document.querySelectorAll('.case-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      // Mở chatbot (nếu muốn tự bật)
+      if (window.voiceflow && window.voiceflow.chat) {
+        window.voiceflow.chat.open();
+
+        // (Tuỳ chọn) báo cho Voiceflow biết đang ở case nào
+        // Cần cấu hình trong flow nếu muốn xử lý label này.
+        // window.voiceflow.chat.interact({
+        //   type: 'launch',
+        //   payload: { label: `start_case_${id}` }
+        // });
+      }
+    }
+
+// KHÔNG load mặc định Tình huống 1 nữa
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('welcomeMsg').style.display = 'block';
+    document.getElementById('displayArea').style.display = 'none';
+});
+
+  </script>
+
+</body>
+</html>
